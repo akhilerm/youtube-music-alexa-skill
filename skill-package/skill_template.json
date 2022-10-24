@@ -1,0 +1,16 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "interfaces": [
+          {
+            "type": "AUDIO_PLAYER"
+          }
+        ]
+      }
+    },
+    "publishingInformation": {
+      "category": "STREAMING_SERVICE"
+    }
+  }
+}
