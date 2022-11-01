@@ -32,7 +32,7 @@
               }
             ],
             "samples": [
-              "play {songQuery}"
+	       "play {songQuery}"
             ]
           },
           {

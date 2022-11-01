@@ -13,8 +13,6 @@ is some skill that is available please raise a PR so that, the link to the skill
 1. setup aws developer account
 2. Setup aws cli and configure, node js is also required
 3. Install ask cli and configure
-4. 
-
-how to generate ARn for lambda function. needs to add it to the document
+4. `ask deploy` will create lambda functions and deploy
 
 #### Development
