@@ -49,7 +49,8 @@ const controller = {
       const playBehavior = "REPLACE_ALL";
       console.log("play");
       console.log(audioInfo);
-      const audioFormat = await getAudioUrl(audioInfo.id.videoId);
+      const id= audioInfo.id.videoId;
+      const audioFormat = await getAudioUrl(id);
       console.log(audioFormat);
       responseBuilder
         .speak(`Playing  ${audioInfo.snippet.title}`)
