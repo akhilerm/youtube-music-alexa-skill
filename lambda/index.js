@@ -1,33 +1,89 @@
-// This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK (v2).
-// Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
-// session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
+const ytmusic = require('node-youtube-music');
+const ytdl = require('ytdl-core');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = 'Welcome, you can say Hello or Help. Which would you like to try?';
+        const speakOutput = 'Welcome to youtube music';
+        const repromptSpeakOutput = 'You can say, play vikram title track, to begin'
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt(speakOutput)
+            .reprompt(repromptSpeakOutput)
             .getResponse();
     }
 };
-const HelloWorldIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'HelloWorldIntent';
+const PlaySongIntentHandler = {
+    async canHandle(handlerInput) {
+        return (
+            Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" &&
+            Alexa.getIntentName(handlerInput.requestEnvelope) === "PlaySongIntent"
+        );
     },
     handle(handlerInput) {
-        const speakOutput = 'Hello World!';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-            .getResponse();
-    }
+        console.log("Play music");
+        const speechText =
+            handlerInput.requestEnvelope.request.intent.slots.songQuery.value;
+        if (speechText) {
+            return controller.search(handlerInput, speechText);
+        } else {
+            return handlerInput.responseBuilder
+                .speak("You can say, play vikram title track, to begin.")
+                .getResponse();
+        }
+    },
+
 };
+
+const controller = {
+    async search(handlerInput, query) {
+        console.log(query);
+        const music = await searchForMusic(query);
+        return this.play(handlerInput, music);
+    },
+    async play(handlerInput, musicInfo) {
+        const { responseBuilder } = handlerInput;
+        const playBehavior = "REPLACE_ALL";
+        console.log("play");
+        console.log(musicInfo);
+        const audioFormat = await getAudioUrl(musicInfo.youtubeId);
+        console.log(audioFormat);
+        responseBuilder
+            .speak(`Playing  ${musicInfo.title}`)
+            .withShouldEndSession(true)
+            .addAudioPlayerPlayDirective(
+                playBehavior,
+                audioFormat.url,
+                musicInfo.youtubeId,
+                0,
+                null
+            );
+        return responseBuilder.getResponse();
+    },
+    async stop(handlerInput, message) {
+        return handlerInput.responseBuilder
+            .speak(message)
+            .addAudioPlayerStopDirective()
+            .getResponse();
+    },
+};
+
+const searchForMusic = async (searchQuery) => {
+    musics = await ytmusic.searchMusics(searchQuery);
+    return musics[0];
+
+}
+
+const getAudioUrl = async (videoId) => {
+    const audioInfo = await ytdl.getInfo(videoId, {});
+    const audioFormat = await ytdl.chooseFormat(audioInfo.formats, {
+        quality: "highestaudio",
+    });
+    return audioFormat;
+};
+
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -46,13 +102,12 @@ const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && (Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.CancelIntent'
-                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
+                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent'
+                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.PauseIntent');
     },
     handle(handlerInput) {
         const speakOutput = 'Goodbye!';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .getResponse();
+        return controller.stop(handlerInput, speakOutput);
     }
 };
 const SessionEndedRequestHandler = {
@@ -108,7 +163,7 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
-        HelloWorldIntentHandler,
+        PlaySongIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
