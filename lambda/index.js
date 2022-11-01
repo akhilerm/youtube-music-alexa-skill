@@ -51,7 +51,7 @@ const controller = {
         const audioFormat = await getAudioUrl(musicInfo.youtubeId);
         console.log(audioFormat);
         responseBuilder
-            .speak(`Playing  ${musicInfo.title}`)
+            .speak(`Playing  ${musicInfo.title} by ${musicInfo.artists[0].name}`)
             .withShouldEndSession(true)
             .addAudioPlayerPlayDirective(
                 playBehavior,
@@ -79,7 +79,7 @@ const searchForMusic = async (searchQuery) => {
 const getAudioUrl = async (videoId) => {
     const audioInfo = await ytdl.getInfo(videoId, {});
     const audioFormat = await ytdl.chooseFormat(audioInfo.formats, {
-        quality: "highestaudio",
+        quality: "140",
     });
     return audioFormat;
 };

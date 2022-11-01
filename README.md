@@ -15,4 +15,6 @@ is some skill that is available please raise a PR so that, the link to the skill
 3. Install ask cli and configure
 4. `ask deploy` will create lambda functions and deploy
 
+add YOUTUBE_API_KEY, from google apis.
+
 #### Development
