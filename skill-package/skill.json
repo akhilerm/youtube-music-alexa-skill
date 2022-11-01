@@ -2,24 +2,44 @@
   "manifest": {
     "publishingInformation": {
       "locales": {
-        "en-US": {
-          "summary": "Sample Short Description",
+        "en-IN": {
+          "summary": "Alexa Youtube Music Skill",
           "examplePhrases": [
-            "Alexa open hello world",
-            "hello",
-            "help"
+            "Alexa open youtube"
           ],
-          "name": "Youtube",
-          "description": "Sample Full Description"
+          "name": "youtube-music-skill",
+          "description": "Alexa skill to play youtube music on alexa devices"
+        },
+        "en-US": {
+          "summary": "Alexa Youtube Music Skill",
+          "examplePhrases": [
+            "Alexa open youtube"
+          ],
+          "name": "youtube-music-skill",
+          "description": "Alexa skill to play youtube music on alexa devices"
+        },
+        "en-GB": {
+          "summary": "Alex Youtube Music Skill",
+          "examplePhrases": [
+            "Alexa open youtube"
+          ],
+          "name": "youtube-music-skill",
+          "description": "Alexa skill to play youtube music on alexa devices"
         }
       },
-      "isAvailableWorldwide": true,
+      "isAvailableWorldwide": false,
       "testingInstructions": "Sample Testing Instructions.",
-      "category": "KNOWLEDGE_AND_TRIVIA",
+      "category": "STREAMING_SERVICE",
       "distributionCountries": []
     },
     "apis": {
-      "custom": {}
+      "custom": {
+        "interfaces": [
+          {
+            "type": "AUDIO_PLAYER"
+          }
+        ]
+      }
     },
     "manifestVersion": "1.0"
   }
