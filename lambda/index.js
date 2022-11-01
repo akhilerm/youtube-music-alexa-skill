@@ -84,7 +84,7 @@ const searchForVideos = async (searchQuery, nextPageToken, amount) => {
 const getAudioUrl = async (videoId) => {
     const audioInfo = await ytdl.getInfo(videoId, {});
     const audioFormat = await ytdl.chooseFormat(audioInfo.formats, {
-        quality: "140",
+        quality: "highestaudio",
     });
     return audioFormat;
 };
