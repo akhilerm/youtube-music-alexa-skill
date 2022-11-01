@@ -13,6 +13,7 @@
         "ask-sdk-model": "^1.18.0",
         "aws-sdk": "^2.326.0",
         "node-youtube-music": "^0.8.3",
+        "yt-list": "^0.1.1",
         "ytdl-core": "^4.11.2"
     }
 }

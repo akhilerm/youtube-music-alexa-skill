@@ -1,5 +1,6 @@
 const Alexa = require('ask-sdk-core');
-const ytmusic = require('node-youtube-music');
+//const ytmusic = require('node-youtube-music');
+const ytlist = require('yt-list');
 const ytdl = require('ytdl-core');
 
 const LaunchRequestHandler = {
@@ -39,28 +40,28 @@ const PlaySongIntentHandler = {
 
 const controller = {
     async search(handlerInput, query) {
-        console.log(query);
-        const music = await searchForMusic(query);
-        return this.play(handlerInput, music);
+      console.log(query);
+      const data = await searchForVideos(query);
+      return this.play(handlerInput, data.items[0]);
     },
-    async play(handlerInput, musicInfo) {
-        const { responseBuilder } = handlerInput;
-        const playBehavior = "REPLACE_ALL";
-        console.log("play");
-        console.log(musicInfo);
-        const audioFormat = await getAudioUrl(musicInfo.youtubeId);
-        console.log(audioFormat);
-        responseBuilder
-            .speak(`Playing  ${musicInfo.title} by ${musicInfo.artists[0].name}`)
-            .withShouldEndSession(true)
-            .addAudioPlayerPlayDirective(
-                playBehavior,
-                audioFormat.url,
-                musicInfo.youtubeId,
-                0,
-                null
-            );
-        return responseBuilder.getResponse();
+    async play(handlerInput, audioInfo) {
+      const { responseBuilder } = handlerInput;
+      const playBehavior = "REPLACE_ALL";
+      console.log("play");
+      console.log(audioInfo);
+      const audioFormat = await getAudioUrl(audioInfo.id.videoId);
+      console.log(audioFormat);
+      responseBuilder
+        .speak(`Playing  ${audioInfo.snippet.title}`)
+        .withShouldEndSession(true)
+        .addAudioPlayerPlayDirective(
+          playBehavior,
+          audioFormat.url,
+          audioInfo.id.videoId,
+          0,
+          null
+        );
+      return responseBuilder.getResponse();
     },
     async stop(handlerInput, message) {
         return handlerInput.responseBuilder
@@ -74,6 +75,10 @@ const searchForMusic = async (searchQuery) => {
     musics = await ytmusic.searchMusics(searchQuery);
     return musics[0];
 
+}
+
+const searchForVideos = async (searchQuery, nextPageToken, amount) => {
+    return await ytlist.searchVideos(searchQuery, nextPageToken, amount);
 }
 
 const getAudioUrl = async (videoId) => {
