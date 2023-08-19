@@ -1,3 +1,5 @@
+## DEPRECATED : Self hosted skill is now deprecated in favour of the alexa hosted skill
+
 ### Alexa Youtube Music Skill
 
 Alexa does not provide native integration to neither youtube nor youtube music. This skill helps to play music from
