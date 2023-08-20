@@ -44,9 +44,16 @@ Please follow the instructions at https://developer.amazon.com/en-US/docs/alexa/
 ```
 3.Generate a [google cloud API](https://cloud.google.com/docs/authentication/api-keys) with `YouTube Data API v3` restriction, and export it as
 ```shell
-export YOUTUBE_API_KEY=<your key>
+export YOUTUBE_API_KEY_ALEXA_SKILL_ENV=<your key>
 ```
 4. Run the initialization script to prepare the dev environment with the skill code
 ```shell
-hack/prepare_dev_env.sh <skill root directory> <skill-repo>
+wget https://gist.githubusercontent.com/akhilerm/db4b9faa5c5ae10cf0400948927406a6/raw/prepare_dev_env.sh
+chmod +x prepare_dev_env.sh
+./prepare_dev_env.sh <skill root directory> akhilerm/youtube-music-alexa-skill
 ```
+5. Use `make deploy` to deploy the skill to alexa. This will merge the `dev` branch to `master` branch and push
+the changes to AWS CodeCommit.
+
+NOTE: While editing interaction models, only the `en-US.json` need to be edited and use `make sync-locale` to sync with
+the other locales
