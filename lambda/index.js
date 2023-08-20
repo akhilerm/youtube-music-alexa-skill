@@ -1,5 +1,5 @@
 const Alexa = require('ask-sdk-core');
-const ytlist = require('yt-list');
+const ytmusic = require('node-youtube-music');
 const ytdl = require('ytdl-core');
 require('dotenv').config();
 
@@ -41,16 +41,16 @@ const PlaySongIntentHandler = {
 
 const controller = {
     async search(handlerInput, query) {
-        const data = await searchForVideos(query);
-        return this.play(handlerInput, data.items[0]);
+        const data = await searchForMusic(query);
+        return this.play(handlerInput, data);
     },
     async play(handlerInput, audioInfo) {
         const { responseBuilder } = handlerInput;
         const playBehavior = "REPLACE_ALL";
-        const id= audioInfo.id.videoId;
+        const id= audioInfo.youtubeId;
         const audioFormat = await getAudioUrl(id);
         responseBuilder
-            .speak(`Playing  ${audioInfo.snippet.title}`)
+            .speak(`Playing  ${audioInfo.title}`)
             .withShouldEndSession(true)
             .addAudioPlayerPlayDirective(
                 playBehavior,
@@ -69,8 +69,9 @@ const controller = {
     },
 };
 
-const searchForVideos = async (searchQuery, nextPageToken, amount) => {
-    return await ytlist.searchVideos(searchQuery, nextPageToken, amount);
+const searchForMusic = async (searchQuery) => {
+    musics = await ytmusic.searchMusics(searchQuery);
+    return musics[0];
 }
 
 const getAudioUrl = async (videoId) => {
