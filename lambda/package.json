@@ -13,7 +13,7 @@
     "ask-sdk-model": "^1.19.0",
     "aws-sdk": "^2.326.0",
     "dotenv": "^16.3.1",
-    "node-youtube-music": "^0.8.3",
+    "node-youtube-music": "^0.10.3",
     "yt-list": "^0.1.1",
     "ytdl-core": "^4.11.5"
   }
